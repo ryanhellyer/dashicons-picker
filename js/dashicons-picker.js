@@ -128,8 +128,13 @@
 		} );
 	};
 
-	$( function () {
-		$( '.dashicons-picker' ).dashiconsPicker();
-	} );
+$( function () {
+	$( '.dashicons-picker' ).dashiconsPicker();
+} );
+
+$(document).on('widget-updated widget-added', function( event, $widget ){
+    $widget.find( '.dashicons-picker' ).dashiconsPicker();
+});
+
 
 }( jQuery ) );
