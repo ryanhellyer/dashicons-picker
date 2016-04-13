@@ -1,40 +1,19 @@
 dashicons-picker
 ================
 
-A jQuery plugin to make picking [Dashicons](http://melchoyce.github.io/dashicons/) in WordPress a breeze
+A test widgetised fork of JJJ's Dashicons plugin for WordPress.
 
-![dashicons-picker](https://raw.github.com/bradvin/dashicons-picker/master/dashicons-picker-jquery-plugin.jpg "dashicons-picker")
 
-## Installation ##
+Critical bug - NEED HELP!
+================
+The dashicon picker works on initial page load. But once you have selected an icon once, the icon is not added to the input field on future attempts. And the picker itself doesn't even load after clicking the "Save" button.
 
-First, include both the dashicons-picker.css and dashicons-picker.js files:
+This appears to be related to binding. How, where, why, or what the solution to this is ... unknown to me. If you are able to help, that would be AMAZING! This is driving me insane.
 
-```
-function dashicons_picker_scripts() {
-	$css = plugin_dir_url( __FILE__ ) . 'css/dashicons-picker.css';
-    wp_enqueue_style( 'dashicons-picker', $css, array( 'dashicons' ), '1.0' );
 
-	$js = plugin_dir_url( __FILE__ ) . 'js/dashicons-picker.js';
-	wp_enqueue_script( 'dashicons-picker', $js, array( 'jquery' ), '1.0' );
-}
-add_action( 'admin_enqueue_scripts', 'dashicons_picker_scripts' );</pre>
-```
 
-Together, the 2 files are less than 8KB. And that is unminified, which is very small indeed. And as you can see in the code above, the CSS file is dependent on 'dashicons' so that will automatically include the stylesheets needed to view the dashicons font.
-
-Then in your HTML, give the button a class or "dashicons-picker" and include a data-target attribute which stores the selector to the textbox:
-
-```
-<input class="regular-text" id="dashicons_picker_example_icon1" type="text" />
-<input class="button dashicons-picker" type="button" value="Choose Icon" data-target="#dashicons_picker_example_icon1" />
-```
-
-## Plugin Example ##
-Download this [entire repo](https://github.com/bradvin/dashicons-picker/archive/master.zip) as a zip, and install it like you would any other plugin. A new settings page called "Dashicons Picker Example" will be available where you can play with the icon picker.
-
-## Thanks ##
-
-Thanks to these projects for inspiration, ideas and code:
-
-* [http://victor-valencia.github.io/bootstrap-iconpicker/](http://victor-valencia.github.io/bootstrap-iconpicker/)
-* [http://titosust.github.io/Bootstrap-icon-picker/](http://titosust.github.io/Bootstrap-icon-picker/)
+Notes
+================
+1. Settings do not save - this is because it's a test plugin
+2. This is actually part of a much larger chunk of code. I've just broken it down into this little test plugin to simplify debugging.
+3. Yes I have looked up lots of information about WordPress widgets, binding, saving bla bla bla, and none of it is helping me figure this out. I'm failing to grok something very simple, and will be here for an eternity if I just keep trying to read posts on similar issues.
