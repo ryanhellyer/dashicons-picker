@@ -1,94 +1,71 @@
 <?php
 
 /**
- * Plugin Name: Dashicons Picker Example Plugin
- * Description: A plugin to showcase the dashicons picker
- * Author:      Brad Vincent
- * Author URI:  http://themergency.com
- * Version:     1.1
+ * Plugin Name: Dashicons Picker Example Widget
+ * Description: A plugin to showcase the dashicons picker as a widget
+ * Author:      Ryan Hellyer
+ * Author URI:  https://geek.hellyer.kiwi/
+ * Version:     1.0
  */
+
 
 /**
- * Register example picker setting
- *
- * @since 1.1
+ * Adds Dashicons_Picker_Widget widget.
  */
-function dashicons_picker_register_settings() {
-	register_setting( 'dashicons_picker_settings_group', 'dashicons_picker_settings' );
+class Dashicons_Picker_Widget extends WP_Widget {
+
+	/**
+	 * Register widget with WordPress.
+	 */
+	public function __construct() {
+		parent::__construct(
+			'dashicons_picker_widget', // Base ID
+			__( 'Widget Title', 'text_domain' ), // Name
+			array( 'description' => __( 'A Dashicons Picker Widget', 'text_domain' ), ) // Args
+		);
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+	}
+
+	/**
+	 * Enqueue dashicons picker scripts
+	 */
+	public function scripts() {
+
+		$plugin_url = plugin_dir_url( __FILE__ );
+
+		wp_enqueue_style( 'dashicons-picker',  $plugin_url . 'css/dashicons-picker.css', array( 'dashicons' ), '1.0', false );
+		wp_enqueue_script( 'dashicons-picker', $plugin_url . 'js/dashicons-picker.js',   array( 'jquery'    ), '1.1', true  );
+	}
+
+	/**
+	 * Back-end widget form.
+	 *
+	 * @see WP_Widget::form()
+	 *
+	 * @param array $instance Previously saved values from database.
+	 */
+	public function form( $instance ) {
+
+		?>
+
+		<table class="form-table">
+			<tr>
+				<th scope="row">
+					<label for="<?php echo $this->get_field_id( 'fontawesome-icon' ); ?>"><?php _e( 'Icon' ); ?></label>
+				</th>
+				<td>
+					<input class="regular-text" type="text" id="<?php echo $this->get_field_id( 'fontawesome-icon' ); ?>" name="<?php echo $this->get_field_name( 'fontawesome-icon' ); ?>" value="<?php if( isset( $options['icon1'] ) ) { echo esc_attr( $options['icon1'] ); } ?>"/>
+					<input type="button" data-target="#<?php echo $this->get_field_id( 'fontawesome-icon' ); ?>" class="button dashicons-picker" value="Choose Icon" />
+				</td>
+			</tr>
+		</table><?php 
+	}
+
 }
-add_action( 'admin_init', 'dashicons_picker_register_settings' );
 
-/**
- * Register menu for example settings page
- *
- * @since 1.1
- */
-function dashicons_picker_settings_menu() {
-	add_options_page( __( 'Dashicons Picker Example' ), __( 'Dashicons Picker Example' ), 'manage_options', 'dashicons_picker_settings', 'dashicons_picker_settings_page' );
+// register Foo_Widget widget
+function register_dashicons_picker_widget() {
+	register_widget( 'Dashicons_Picker_Widget' );
 }
-add_action( 'admin_menu', 'dashicons_picker_settings_menu' );
-
-/**
- * Enqueue dashicons picker scripts
- *
- * @since 1.1
- */
-function dashicons_picker_scripts() {
-
-	$plugin_url = plugin_dir_url( __FILE__ );
-
-	wp_enqueue_style( 'dashicons-picker',  $plugin_url . 'css/dashicons-picker.css', array( 'dashicons' ), '1.0', false );
-	wp_enqueue_script( 'dashicons-picker', $plugin_url . 'js/dashicons-picker.js',   array( 'jquery'    ), '1.1', true  );
-}
-add_action( 'admin_enqueue_scripts', 'dashicons_picker_scripts' );
-
-/**
- * Ouput for the example dashicons picker page
- *
- * @since 1.1
- */
-function dashicons_picker_settings_page() {
-
-	$options = get_option( 'dashicons_picker_settings' ); ?>
-
-	<div class="wrap">
-		<h2><?php _e( 'Dashicons Example Settings' ); ?></h2>
-		<form method="post" action="options.php" class="options_form">
-			<?php settings_fields( 'dashicons_picker_settings_group' ); ?>
-			<table class="form-table">
-				<tr>
-					<th scope="row">
-						<label for="dashicons_picker_example_icon1"><?php _e( 'Icon 1' ); ?></label>
-					</th>
-					<td>
-						<input class="regular-text" type="text" id="dashicons_picker_example_icon1" name="dashicons_picker_settings[icon1]" value="<?php if( isset( $options['icon1'] ) ) { echo esc_attr( $options['icon1'] ); } ?>"/>
-						<input type="button" data-target="#dashicons_picker_example_icon1" class="button dashicons-picker" value="Choose Icon" />
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="dashicons_picker_example_icon2"><?php _e( 'Icon 2' ); ?></label>
-					</th>
-					<td>
-						<input class="regular-text" type="text" id="dashicons_picker_example_icon2" name="dashicons_picker_settings[icon2]" value="<?php if( isset( $options['icon2'] ) ) { echo esc_attr( $options['icon2'] ); } ?>"/>
-						<input type="button" data-target="#dashicons_picker_example_icon2" class="button dashicons-picker" value="pick" />
-					</td>
-				</tr>
-				<tr>
-					<th scope="row">
-						<label for="dashicons_picker_example_icon3"><?php _e( 'Icon 3' ); ?></label>
-					</th>
-					<td>
-						<input class="regular-text" type="text" id="dashicons_picker_example_icon3" name="dashicons_picker_settings[icon3]" value="<?php if( isset( $options['icon2'] ) ) { echo esc_attr( $options['icon3'] ); } ?>"/>
-						<input type="button" data-target="#dashicons_picker_example_icon3" class="button dashicons-picker" value="..." />
-					</td>
-				</tr>
-			</table>
-
-			<?php submit_button(); ?>
-
-		</form>
-	</div>
-
-<?php
-}
+add_action( 'widgets_init', 'register_dashicons_picker_widget' );
